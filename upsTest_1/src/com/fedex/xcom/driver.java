@@ -12,7 +12,7 @@ package com.fedex.xcom;
  */
 public class driver {
     public static void main(String [] args){
-        XCOM X = new XCOM();
-        X.process();
+//        XCOM X = new XCOM();
+//        X.process();
     }
 }
