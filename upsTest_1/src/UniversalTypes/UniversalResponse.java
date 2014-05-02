@@ -15,6 +15,9 @@ import java.util.ArrayList;
 public class UniversalResponse {
     private ArrayList<SingleResponse> responseList;
 
+    public UniversalResponse(){
+        responseList = new ArrayList();
+    }
     /**
      * @return the responseList
      */

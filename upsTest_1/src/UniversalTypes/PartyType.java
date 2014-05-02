@@ -17,6 +17,11 @@ public class PartyType {
     public PartyType(){
         
     }
+    
+    public PartyType(AddressType address, NameType name){
+        this.address = address;
+        this.name = name;
+    }
 
     /**
      * @return the address

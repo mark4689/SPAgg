@@ -17,6 +17,17 @@ public class SingleResponse {
 
     
     public enum DeliveryType{NEXT_DAY, SECOND_DAY, GROUND};
+    
+    public SingleResponse(){
+        
+    }
+    
+    public SingleResponse(DeliveryType deliveryType, String price, String deliveryDate){
+        this.deliveryType = deliveryType;
+        this.price = price;
+        this.deliveryDate = deliveryDate;
+    }
+    
 
     /**
      * @param deliveryType the deliveryType to set
