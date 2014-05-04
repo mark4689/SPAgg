@@ -83,4 +83,26 @@ public class PackageType {
         this.height = height;
     }
     
+    public static PackageType parsePackage(com.fedex.stub.RequestedPackageLineItem rrpl){
+        
+        PackageType pt = new PackageType();
+        pt.setWeight(String.valueOf(rrpl.getWeight().getValue()) + " " + rrpl.getWeight().getUnits().toString());
+        pt.setLength(String.valueOf(rrpl.getDimensions().getLength()) + " in");
+        pt.setWidth(String.valueOf(rrpl.getDimensions().getWidth()) + " in");
+        pt.setHeight(String.valueOf(rrpl.getDimensions().getHeight()) + " in");
+        
+        return pt;
+    }
+    
+    public static PackageType parsePackage(com.ups.xmlschema.xoltws.rate.v1.PackageType upt){
+        
+        PackageType pt = new PackageType();
+        pt.setWeight(upt.getPackageWeight().getWeight());
+        pt.setLength(upt.getDimensions().getLength());
+        pt.setWidth(upt.getDimensions().getWidth());
+        pt.setHeight(upt.getDimensions().getHeight());
+        
+        return pt;
+    }
+    
 }
