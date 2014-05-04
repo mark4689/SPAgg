@@ -91,7 +91,7 @@ public class XCOM {
             if (isResponseOk(reply.getHighestSeverity())) {
                 singlesList = writeServiceOutput(reply, singlesList, srt0, srt1, srt2);
             }
-            printNotifications(reply.getNotifications());
+            //printNotifications(reply.getNotifications());
 
         } catch (RemoteException | ServiceException e) {
         }
@@ -108,22 +108,22 @@ public class XCOM {
         RateReplyDetail[] rrds = reply.getRateReplyDetails();
         for (int i = 0; i < rrds.length; i++) {
             RateReplyDetail rrd = rrds[i];
-            print("\nService type", rrd.getServiceType());
-            print("Packaging type", rrd.getPackagingType());
-            printTime("Delivery Date", rrd.getDeliveryTimestamp(), TimeZone.getTimeZone("PTS"));
-            print("Test Date", getLocalTimeAsStringFromNoneOffsetCalendar(rrd.getDeliveryTimestamp()));
-            if (rrd.getTransitTime() != null) {
-                print("Transit Time: ", rrd.getTransitTime().toString());
-            }
+            //print("\nService type", rrd.getServiceType());
+            //print("Packaging type", rrd.getPackagingType());
+            //printTime("Delivery Date", rrd.getDeliveryTimestamp(), TimeZone.getTimeZone("PTS"));
+            //print("Test Date", getLocalTimeAsStringFromNoneOffsetCalendar(rrd.getDeliveryTimestamp()));
+            //if (rrd.getTransitTime() != null) {
+                //print("Transit Time: ", rrd.getTransitTime().toString());
+           // }
             RatedShipmentDetail[] rsds = rrd.getRatedShipmentDetails();
             for (int j = 0; j < rsds.length; j++) {
-                print("RatedShipmentDetail " + j, "");
+               // print("RatedShipmentDetail " + j, "");
                 RatedShipmentDetail rsd = rsds[j];
                 ShipmentRateDetail srd = rsd.getShipmentRateDetail();
-                print("  Rate type", srd.getRateType());
-                printWeight("  Total Billing weight", srd.getTotalBillingWeight());
-                printMoney("  Total surcharges", srd.getTotalSurcharges());
-                printMoney("  Total net charge", srd.getTotalNetCharge());
+                //print("  Rate type", srd.getRateType());
+                //printWeight("  Total Billing weight", srd.getTotalBillingWeight());
+                //printMoney("  Total surcharges", srd.getTotalSurcharges());
+                //printMoney("  Total net charge", srd.getTotalNetCharge());
 
                 switch (rrd.getServiceType().toString()) {
                     case "STANDARD_OVERNIGHT":
@@ -162,18 +162,18 @@ public class XCOM {
 
                 RatedPackageDetail[] rpds = rsd.getRatedPackages();
                 if (rpds != null && rpds.length > 0) {
-                    print("  RatedPackageDetails", "");
+                    //print("  RatedPackageDetails", "");
                     for (RatedPackageDetail rpd1 : rpds) {
-                        print("  RatedPackageDetail " + i, "");
+                        //print("  RatedPackageDetail " + i, "");
                         RatedPackageDetail rpd = rpd1;
                         PackageRateDetail prd = rpd.getPackageRateDetail();
                         if (prd != null) {
-                            printWeight("    Billing weight", prd.getBillingWeight());
-                            printMoney("    Base charge", prd.getBaseCharge());
+                            //printWeight("    Billing weight", prd.getBillingWeight());
+                            //printMoney("    Base charge", prd.getBaseCharge());
                             Surcharge[] surcharges = prd.getSurcharges();
                             if (surcharges != null && surcharges.length > 0) {
                                 for (Surcharge surcharge : surcharges) {
-                                    printMoney("    " + surcharge.getDescription() + " surcharge", surcharge.getAmount());
+                                    //printMoney("    " + surcharge.getDescription() + " surcharge", surcharge.getAmount());
                                 }
                             }
                         }

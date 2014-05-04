@@ -45,6 +45,7 @@ import com.ups.xmlschema.xoltws.rate.v1.ShipperType;
 import com.ups.xmlschema.xoltws.upss.v1.UPSSecurity;
 import com.ups.xmlschema.xoltws.rate.v1.RatedShipmentType;
 import com.UniversalTypes.*;
+import java.util.ArrayList;
 public class uCom {	    
     static RateService service;
     
@@ -62,8 +63,13 @@ public class uCom {
     /**
      * @param args the command line arguments
      */
-    public String process(PartyType from, PartyType to, com.UniversalTypes.PackageType pkg) {
-       String resStr = "";
+    public UniversalResponseType process(PartyType from, PartyType to, com.UniversalTypes.PackageType pkg) {
+       
+        UniversalResponseType uRes = new UniversalResponseType();
+        ArrayList<SingleResponseType> singlesList = new ArrayList();
+        SingleResponseType srt0 = new SingleResponseType();
+        SingleResponseType srt1 = new SingleResponseType();
+        SingleResponseType srt2 = new SingleResponseType();
        try {
             service = new RateService();
             
@@ -82,10 +88,30 @@ public class uCom {
              List<RatedShipmentType> k = rateResponse.getRatedShipment();
              
             
-            for (int i=0; i<k.size();i++){
-                resStr += "("+k.get(i).getService().getDescription()+k.get(i).getService().getCode()+" - $" + k.get(i).getTotalCharges().getMonetaryValue() + ") - ";
+            //for (int i=0; i<k.size();i++){
+                //resStr += "("+k.get(i).getService().getDescription()+k.get(i).getService().getCode()+" - $" + k.get(i).getTotalCharges().getMonetaryValue() + ") - ";
                
+            //}
+           
+            for (int i=0; i<k.size();i++){
+                if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "01"){
+                    srt0.setDeliveryType(SingleResponseType.DeliveryType.NEXT_DAY);
+                    srt0.setPrice(k.get(i).getTotalCharges().getMonetaryValue()); 
+                    singlesList.add(srt0);
+                }
+                else if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "02"){
+                    srt1.setDeliveryType(SingleResponseType.DeliveryType.SECOND_DAY);
+                    srt1.setPrice(k.get(i).getTotalCharges().getMonetaryValue()); 
+                    singlesList.add(srt1);
+                }
+                else if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "03"){
+                    srt1.setDeliveryType(SingleResponseType.DeliveryType.GROUND);
+                    srt1.setPrice(k.get(i).getTotalCharges().getMonetaryValue());   
+                    singlesList.add(srt2);
+                }
             }
+       
+           
             //resStr = statusCode + " " + description;
             //resStr = statusCode + " " + description;
            
@@ -95,16 +121,17 @@ public class uCom {
         		statusCode = rateErrMsg.getFaultInfo().getErrorDetail().get(0).getPrimaryErrorCode().getCode();
         		description = rateErrMsg.getFaultInfo().getErrorDetail().get(0).getPrimaryErrorCode().getDescription();
         		//updateResultsToString(statusCode, description);
-                        resStr = statusCode + " " + description;
+                        //resStr = statusCode + " " + description;
         	} else {
         		statusCode = e.getMessage();
         		description = e.toString();
         		//updateResultsToString(statusCode, description);
-                        resStr = statusCode + " " + description;
+                        //resStr = statusCode + " " + description;
         	}    		        	
             e.printStackTrace();
         }
-        return resStr;
+        uRes.setResponseList(singlesList);
+        return uRes;
     }
     
     private static RateRequest populateRateRequest(PartyType from, PartyType to, com.UniversalTypes.PackageType pkg){
