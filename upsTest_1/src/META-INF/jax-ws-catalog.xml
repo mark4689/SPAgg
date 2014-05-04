@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="file:/C:/Temp/RateWS.wsdl" uri="wsdl/RateWS.wsdl"/>
-    <system systemId="file:/C:/Temp/UPSSecurity.xsd" uri="wsdl/UPSSecurity.xsd"/>
-    <system systemId="file:/C:/Temp/Error1.1.xsd" uri="wsdl/Error1.1.xsd"/>
-    <system systemId="file:/C:/Temp/RateWebServiceSchema.xsd" uri="wsdl/RateWebServiceSchema.xsd"/>
-    <system systemId="file:/C:/Temp/common.xsd" uri="wsdl/common.xsd"/>
-</catalog>
