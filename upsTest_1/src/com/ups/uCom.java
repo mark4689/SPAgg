@@ -43,6 +43,8 @@ import com.ups.xmlschema.xoltws.rate.v1.ShipToType;
 import com.ups.xmlschema.xoltws.rate.v1.ShipmentType;
 import com.ups.xmlschema.xoltws.rate.v1.ShipperType;
 import com.ups.xmlschema.xoltws.upss.v1.UPSSecurity;
+import com.ups.xmlschema.xoltws.rate.v1.RatedShipmentType;
+import com.UniversalTypes.*;
 public class uCom {	    
     static RateService service;
     
@@ -60,8 +62,8 @@ public class uCom {
     /**
      * @param args the command line arguments
      */
-    public String process() {
-       String resStr;
+    public String process(PartyType from, PartyType to, com.UniversalTypes.PackageType pkg) {
+       String resStr = "";
        try {
             service = new RateService();
             
@@ -71,12 +73,21 @@ public class uCom {
            
             bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://wwwcie.ups.com/webservices/Rate");
            
-            RateResponse rateResponse = ratePortType.processRate(populateRateRequest(), populateUPSSecurity());
-            System.out.print(rateResponse.getRatedShipment().get(0).getTotalCharges().getMonetaryValue());
+            RateResponse rateResponse = ratePortType.processRate(populateRateRequest(from, to, pkg), populateUPSSecurity());
+            //System.out.print(rateResponse.getRatedShipment().get(0).getTotalCharges().getMonetaryValue());
             statusCode = rateResponse.getResponse().getResponseStatus().getCode();
             description = rateResponse.getResponse().getResponseStatus().getDescription();
             //updateResultsToString(statusCode, description);
-            resStr = statusCode + " " + description;
+            
+             List<RatedShipmentType> k = rateResponse.getRatedShipment();
+             
+            
+            for (int i=0; i<k.size();i++){
+                resStr += "("+k.get(i).getService().getDescription()+k.get(i).getService().getCode()+" - $" + k.get(i).getTotalCharges().getMonetaryValue() + ") - ";
+               
+            }
+            //resStr = statusCode + " " + description;
+            //resStr = statusCode + " " + description;
            
         } catch(Exception e) {
         	if(e instanceof RateErrorMessage){
@@ -96,32 +107,33 @@ public class uCom {
         return resStr;
     }
     
-    private static RateRequest populateRateRequest(){
+    private static RateRequest populateRateRequest(PartyType from, PartyType to, com.UniversalTypes.PackageType pkg){
     	RateRequest rateRequest = new RateRequest();
 		RequestType request = new RequestType();
 		//String[] requestOption = { "rate" };
 		//request.setRequestOption(requestOption);
 		List<String> requestOptionList = request.getRequestOption();
-		requestOptionList.add("rate");
+		requestOptionList.add("shop");
+                
 		rateRequest.setRequest(request);
 
 		ShipmentType shpmnt = new ShipmentType();
 
 		/** *******Shipper*********************/
 		ShipperType shipper = new ShipperType();
-		shipper.setName("XYZ Associates");
+		shipper.setName(from.getName());
 		shipper.setShipperNumber("222006");
 		AddressType shipperAddress = new AddressType();
 		
 		//String[] addressLines = { "Southam Rd", "Apt 3B" };
 		//shipperAddress.setAddressLine(addressLines);
 		List<String> addressLine = shipperAddress.getAddressLine();
-		addressLine.add("Southam Rd");
-		addressLine.add("Apt 3B");
+		addressLine.add(from.getAddress().getLine1());
+		//addressLine.add("Apt 3B");
 		
-		shipperAddress.setCity("Erie");
-		shipperAddress.setPostalCode("16509");
-		shipperAddress.setStateProvinceCode("PA");
+		shipperAddress.setCity(from.getAddress().getCity());
+		shipperAddress.setPostalCode(from.getAddress().getZip());
+		shipperAddress.setStateProvinceCode(from.getAddress().getState());
 		shipperAddress.setCountryCode("US");
 		shipper.setAddress(shipperAddress);
 		shpmnt.setShipper(shipper);
@@ -129,16 +141,16 @@ public class uCom {
 
 		/** ************ShipFrom*******************/
 		ShipFromType shipFrom = new ShipFromType();
-		shipFrom.setName("XYZ Associates");
+		shipFrom.setName(from.getName());
 		AddressType shipFromAddress = new AddressType();
 		//shipFromAddress.setAddressLine(addressLines);
 		List<String> shipFromAddressLine = shipFromAddress.getAddressLine();
-		shipFromAddressLine.add("Southam Rd");
-		shipFromAddressLine.add("Apt 3B");
+		shipFromAddressLine.add(from.getAddress().getLine1());
+		//shipFromAddressLine.add("Apt 3B");
 		
-		shipFromAddress.setCity("TimoniumCity");
-		shipFromAddress.setPostalCode("21093");
-		shipFromAddress.setStateProvinceCode("MD");
+		shipFromAddress.setCity(from.getAddress().getCity());
+		shipFromAddress.setPostalCode(from.getAddress().getZip());
+		shipFromAddress.setStateProvinceCode(from.getAddress().getState());
 		shipFromAddress.setCountryCode("US");
 		shipFrom.setAddress(shipFromAddress);
 		shpmnt.setShipFrom(shipFrom);
@@ -146,15 +158,15 @@ public class uCom {
 
 		/** ************ShipTo*******************/
 		ShipToType shipTo = new ShipToType();
-		shipTo.setName("PQR Associates");
+		shipTo.setName(to.getName());
 		ShipToAddressType shipToAddress = new ShipToAddressType();
 		//String[] shipToAddressLines = { "SomeUnknownStreet" };
 		//shipToAddress.setAddressLine(shipToAddressLines);
 		List<String> shipToAddresLine = shipToAddress.getAddressLine();
-		shipToAddresLine.add("SomeUnknownStreet");
-		shipToAddress.setCity("Lexington");
-		shipToAddress.setPostalCode("40508");
-		shipToAddress.setStateProvinceCode("KY");
+		shipToAddresLine.add(to.getAddress().getLine1());
+		shipToAddress.setCity(to.getAddress().getCity());
+		shipToAddress.setPostalCode(to.getAddress().getZip());
+		shipToAddress.setStateProvinceCode(to.getAddress().getState());
 		shipToAddress.setCountryCode("US");
 		shipTo.setAddress(shipToAddress);
 		shpmnt.setShipTo(shipTo);
@@ -162,15 +174,16 @@ public class uCom {
 
 		/**********Service********************** */
 		CodeDescriptionType service = new CodeDescriptionType();
-		service.setCode("02");
-		service.setDescription("Next Day Air");
+		service.setCode("03");
+             
+		service.setDescription("Ground");
 		shpmnt.setService(service);
 		/** ********Service***********************/
 
 		/********************Package***************** */
 		PackageType pkg1 = new PackageType();
 		CodeDescriptionType pkgingType = new CodeDescriptionType();
-		pkgingType.setCode("01");
+		pkgingType.setCode("02");
 		//pkgingType.setDescription("UPS Letter");
 		pkg1.setPackagingType(pkgingType);
 		PackageWeightType pkgWeight = new PackageWeightType();
@@ -178,7 +191,7 @@ public class uCom {
 		UOMType.setCode("lbs");
 		UOMType.setDescription("Pounds");
 		pkgWeight.setUnitOfMeasurement(UOMType);
-		pkgWeight.setWeight("30");
+		pkgWeight.setWeight(pkg.getWeight());
 		pkg1.setPackageWeight(pkgWeight);
 		//PackageType[] pkgArray = { pkg1 };
 		
