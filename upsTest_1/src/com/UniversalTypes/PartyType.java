@@ -12,8 +12,8 @@ package com.UniversalTypes;
  */
 public class PartyType {
     private AddressType address;
-    private NameType name;
-    
+    //private NameType name;
+    private String name;
     public PartyType(){
         
     }
@@ -35,14 +35,14 @@ public class PartyType {
     /**
      * @return the name
      */
-    public NameType getName() {
+    public String getName(){
         return name;
-    }
+   }
 
     /**
      * @param name the name to set
      */
-    public void setName(NameType name) {
+    public void setName(String name) {
         this.name = name;
     }
     
