@@ -87,26 +87,30 @@ public class uCom {
             
              List<RatedShipmentType> k = rateResponse.getRatedShipment();
              
-            
-            //for (int i=0; i<k.size();i++){
-                //resStr += "("+k.get(i).getService().getDescription()+k.get(i).getService().getCode()+" - $" + k.get(i).getTotalCharges().getMonetaryValue() + ") - ";
+            String resStr = "";
+            for (int i=0; i<k.size();i++){
+                resStr += "("+k.get(i).getService().getDescription()+k.get(i).getService().getCode()+")";
                
-            //}
+            }
+            System.out.println(resStr);
+            String one = "01";
+            String two = "02";
+            String three = "03";
            
             for (int i=0; i<k.size();i++){
-                if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "01"){
+                if(k.get(i).getService().getCode().equals("01")){
                     srt0.setDeliveryType(SingleResponseType.DeliveryType.NEXT_DAY);
                     srt0.setPrice(k.get(i).getTotalCharges().getMonetaryValue()); 
                     singlesList.add(srt0);
                 }
-                else if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "02"){
+                if(k.get(i).getService().getCode().equals(two)){
                     srt1.setDeliveryType(SingleResponseType.DeliveryType.SECOND_DAY);
                     srt1.setPrice(k.get(i).getTotalCharges().getMonetaryValue()); 
                     singlesList.add(srt1);
                 }
-                else if(k.get(i).getService().getDescription()+k.get(i).getService().getCode() == "03"){
-                    srt1.setDeliveryType(SingleResponseType.DeliveryType.GROUND);
-                    srt1.setPrice(k.get(i).getTotalCharges().getMonetaryValue());   
+                if(k.get(i).getService().getCode().equals(three)){
+                    srt2.setDeliveryType(SingleResponseType.DeliveryType.GROUND);
+                    srt2.setPrice(k.get(i).getTotalCharges().getMonetaryValue());   
                     singlesList.add(srt2);
                 }
             }
@@ -116,6 +120,7 @@ public class uCom {
             //resStr = statusCode + " " + description;
            
         } catch(Exception e) {
+            System.out.println(e);
         	if(e instanceof RateErrorMessage){
         		RateErrorMessage rateErrMsg = ((RateErrorMessage)e);
         		statusCode = rateErrMsg.getFaultInfo().getErrorDetail().get(0).getPrimaryErrorCode().getCode();

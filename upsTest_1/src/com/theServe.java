@@ -34,18 +34,20 @@ public class theServe {
        
        PackageType p = new PackageType("2","2","1","5");
        
-        
-        uni = X.process(a, b, p);
-        for(int i = 0; i < uni.getResponseList().size();i++){
-            System.out.println("F"+uni.getResponseList().get(i).getDeliveryType());
-            System.out.println("F"+uni.getResponseList().get(i).getPrice());
-        }
-        
-        uni2 = U.process(a,b,p);
+        uni2 = U.process(a, b, p);
         for(int i = 0; i < uni2.getResponseList().size();i++){
             System.out.println("U"+uni2.getResponseList().get(i).getDeliveryType());
             System.out.println("U"+uni2.getResponseList().get(i).getPrice());
         }
+        
+        uni = X.process(a, b, p);
+        
+        for(int i = 0; i < uni.getResponseList().size();i++){
+            System.out.println("F"+uni.getResponseList().get(i).getDeliveryType());
+           System.out.println("F"+uni.getResponseList().get(i).getPrice());
+        }
+        
+        
     
        
  
