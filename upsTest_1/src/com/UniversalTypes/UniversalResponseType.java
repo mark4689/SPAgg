@@ -12,17 +12,9 @@ import java.util.ArrayList;
  *
  * @author mak5278
  */
-<<<<<<< HEAD:upsTest_1/src/UniversalTypes/UniversalResponse.java
-public class UniversalResponse {
-    private ArrayList<SingleResponse> responseList;
-
-    public UniversalResponse(){
-        responseList = new ArrayList();
-    }
-=======
 public class UniversalResponseType {
     private ArrayList<SingleResponseType> responseList;
->>>>>>> noFedex:upsTest_1/src/com/UniversalTypes/UniversalResponseType.java
+
     /**
      * @return the responseList
      */

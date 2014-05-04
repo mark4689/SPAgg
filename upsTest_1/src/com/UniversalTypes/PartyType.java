@@ -18,7 +18,7 @@ public class PartyType {
         
     }
     
-    public PartyType(AddressType address, NameType name){
+    public PartyType(AddressType address, String name){
         this.address = address;
         this.name = name;
     }

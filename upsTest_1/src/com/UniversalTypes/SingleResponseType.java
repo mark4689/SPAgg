@@ -17,14 +17,14 @@ public class SingleResponseType {
     
     public enum DeliveryType{NEXT_DAY, SECOND_DAY, GROUND};
     
-    public SingleResponse(){
+    public SingleResponseType(){
         
     }
     
-    public SingleResponse(DeliveryType deliveryType, String price, String deliveryDate){
+    public SingleResponseType(DeliveryType deliveryType, String price, String deliveryDate){
         this.deliveryType = deliveryType;
         this.price = price;
-        this.deliveryDate = deliveryDate;
+        //this.deliveryDate = deliveryDate;
     }
     
 
